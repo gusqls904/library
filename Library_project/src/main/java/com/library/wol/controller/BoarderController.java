@@ -80,7 +80,7 @@ public class BoarderController {
 		    
 		    
 			System.out.println(map.get("search"));
-			System.out.println(map.get("select"));
+			System.out.println(map.get("select123"));
 			m.addAttribute(Bs.boardselect(map));
 			Gson json = new Gson();
 			return json.toJson(m);
