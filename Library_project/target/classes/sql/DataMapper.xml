@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="data">
+
+	<!-- 도서검색 -->
+	<select id="select" parameterType="map"
+		resultType="com.library.wol.model.DataDto">
+		select * from library
+		<where>
+		<if test="select1 == 'all'">
+		book_name like
+		concat('%',#{select},'%') or
+		author like
+		concat('%',#{select},'%') or
+		publisher like
+		concat('%',#{select},'%')
+		</if>
+		<if test="select1 == 'bookname'">
+		book_name like
+		concat('%',#{select},'%')
+		</if>
+		<if test="select1 == 'author'">
+		Author like
+		concat('%',#{select},'%')
+		</if>
+		<if test="select1 == 'publisher'">
+		publisher like
+		concat('%',#{select},'%')
+		</if>
+		</where>
+	</select>
+	<!-- 도서검색 끝 -->
+
+	<!-- 신규 도서 등록 -->
+	<insert id="insertbook" parameterType="map">
+		insert into
+		library(book_name,image,author,publisher,issueyear,state,term)
+		values(#{book_name},#{image},#{author},#{publisher},#{issueyear},0,null)
+	</insert>
+
+	<!-- 도서 대여 -->
+	<insert id="loaninsert" parameterType="map">
+		insert into
+		book_loan(user_id,book_id,loan_date)
+		values(#{user_id},#{book_id},now());
+	</insert>
+	<insert id="returnupdate" parameterType="map">
+		update library
+		set term =
+		date_add(now(), interval 14 day)
+		where book_id = #{book_id}
+	</insert>
+	<!-- 상태값 변경 -->
+	<update id="loanupdate" parameterType="map">
+		update library
+		set state = 1
+		where book_id = #{book_id}
+	</update>
+	<!-- 도서 대여 끝 -->
+	
+	<!-- 도서예약 유효성검사 -->
+	<select id="reservecheck" parameterType="map"
+		resultType="com.library.wol.model.BookLoanDto">
+		select book_id from book_loan where user_id = #{user_id} and
+		book_id = #{book_id} and return_date is null
+	</select>
+
+	<!-- 도서 예약 -->
+	<select id="inspectreserve" parameterType="map"
+		resultType="string">
+		select user_id from book_reserve where user_id = #{user_id}
+	</select>
+
+	<!-- 도서 예약 -->
+	<insert id="insertreserve" parameterType="map">
+		insert into
+		book_reserve(user_id,book_id,reserve_date,return_reserve)
+		values(#{user_id},#{book_id},now(),date_add(now(), interval 14 day))
+	</insert>
+	<update id="book_count" parameterType="String">
+		update library
+		set
+		reserve_no = #{user_id}
+		where book_id = #{book_id}
+	</update>
+	<!-- 도서 예약 끝 -->
+
+
+</mapper>

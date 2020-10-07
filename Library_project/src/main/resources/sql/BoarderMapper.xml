@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Board">
+
+   <!-- 게시판 목록뽑아오는 부분 -->
+   <select id="BoardList" resultType="com.library.wol.model.BoardVO">
+   select * from Board
+   </select>
+   
+   <!-- 게시판 글쓰기 부분 -->
+    <insert id="BoardWrite" parameterType="com.library.wol.model.BoardVO">
+   insert into Board(title,content,writer,regdate)
+		values(#{title}, #{content}, #{writer}, #{regdate})
+   </insert>
+   
+   
+   <!--   게시판 상세보기 부분  -->
+    <select id="ViewDetaill" parameterType="int" resultType="com.library.wol.model.BoardVO">
+    select * from Board where bno = #{bno}
+   </select>
+   
+    
+    <!--   게시글 삭제 부분  -->
+    <delete id="delete" parameterType="int">
+    DELETE from Board where bno = #{bno}
+    </delete>
+   	
+   	
+   	
+   	  
+    <!--   게시글 수정 부분  -->
+    <update id="update" parameterType="com.library.wol.model.BoardVO">
+   update Board set title =#{title},content =#{content} where bno =#{bno}
+    </update>
+    
+     	  
+    <!--   선택한 게시판 정보 불러와서 수정하는 부분  -->
+    <select id="boardupdateform" resultType="com.library.wol.model.BoardVO" parameterType="int">
+  	select * from Board where bno =#{bno}
+    </select>
+    
+  
+  
+   <!--   게시판 클릭시 카운터 업데이트   -->
+   <update id="Viewcnt" parameterType="int">
+   UPDATE Board SET viewcnt = viewcnt+1 where bno = #{bno}
+  	</update>
+
+
+	
+<!-- 게시판  전체 검색 -->
+
+
+	<select id="Selectone" parameterType="map" resultType="com.library.wol.model.BoardVO">
+		select * from Board
+		<where>
+			<if test="select == 'title'">
+				title like concat('%',#{search},'%')
+			</if>
+			<if test="select == 'writer'">
+				writer like concat('%',#{search},'%')
+			</if>
+			<if test="select == 'all'">
+			title like concat('%',#{search},'%') or
+			writer like concat('%',#{search},'%') or
+			content like concat('%',#{search},'%')
+			</if>
+		</where> order by bno limit #{start}, #{per}
+	</select>
+	
+	
+	<!-- 신규 가맹 대기 -->
+   
+
+   <select id="one"
+      resultType="com.library.wol.model.BoardVO"
+      parameterType="int">
+      select * from Board where bno =
+      #{bno}
+   </select>
+
+   <select id="max" resultType="int">
+      select max(bno) from
+      Board
+   </select>
+
+   <select id="count" resultType="int">
+      select count(*) from Board
+   </select>
+   
+
+   <select id="list" parameterType="map"
+      resultType="com.library.wol.model.BoardVO">
+      select * from Board <where>
+			<if test="select == 'title'">
+				title like concat('%',#{search},'%')
+			</if>
+			<if test="select == 'writer'">
+				writer like concat('%',#{search},'%')
+			</if>
+			<if test="select == 'all'">
+			title like concat('%',#{search},'%') or
+			writer like concat('%',#{search},'%') or
+			content like concat('%',#{search},'%')
+			</if>
+		</where>
+		order by bno limit #{start}, 10
+   </select>
+   
+    
+   	<!-- ajax컨트롤러 -->
+     <select id="searchcount" parameterType="map" resultType="int">
+		select count(*) from Board
+		<where>
+			<if test="select == 'title'">
+				title like concat('%',#{search},'%')
+			</if>
+			<if test="select == 'writer'">
+				writer like concat('%',#{search},'%')
+			</if>
+			<if test="select == 'all'">
+			title like concat('%',#{search},'%') or
+			writer like concat('%',#{search},'%') or
+			content like concat('%',#{search},'%')
+			</if>
+		</where>
+	</select>
+   
+   
+ 
+</mapper> 

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sign">
+
+	<select id="checkid" parameterType="String" resultType="String">
+		select user_id from lib_member where user_id=#{user_id};
+	</select>
+
+	<select id="checkidpw" parameterType="map" resultType="String">
+		 select user_id from lib_member where user_id=#{user_id} and password=#{password}
+	</select>
+	
+	<select id="namemailcheck" parameterType="map" resultType="int">
+		select count(*) from lib_member where name=#{name} and email=#{email}
+	</select>
+		
+<insert id="signup" parameterType="com.library.wol.model.SignDto">
+	insert into lib_member
+		set user_id = #{user_id},
+			password = #{password},
+		    name = #{name},
+		    gender = #{gender},
+		    birth = #{birth},
+		    email = #{email},
+		    phone = #{phone},	
+		    address = #{address}
+	</insert>
+	
+	<update id="pwupdate" parameterType="com.library.wol.model.SignDto">
+	UPDATE lib_member SET password = #{password} WHERE email=#{email}
+	</update>
+	
+
+	<select id="profileselect" parameterType="String" resultType="com.library.wol.model.SignDto">
+	select * from lib_member where user_id=#{user_id}
+	</select>
+	
+	
+	<update id="profileupdate" parameterType="com.library.wol.model.SignDto">
+	update lib_member set password =#{password},address = #{address},phone=#{phone}, email = #{email} where user_id =#{user_id}
+	</update>
+	
+	
+	
+</mapper>

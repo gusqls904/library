@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="loan">
+
+	<!-- 대여중인 도서리스트 -->
+	<select id="loanselect" parameterType="String"
+		resultType="com.library.wol.model.LoanDto">
+		select datediff(now(),library.term) as
+		datediff,library.book_id,
+		no,book_name,user_id,loan_date,library.term,return_date,arrears,state
+		from library,book_loan
+		where library.book_id = book_loan.book_id and
+		book_loan.user_id = #{user_id} and return_date is null
+	</select>
+
+
+	<!-- 도서 반납 -->
+	<update id="returnbook" parameterType="map">
+		update book_loan,library
+		set
+		return_date = now(),arrears = datediff(now(),term)
+		where 
+		book_loan.book_id = library.book_id and
+		user_id = #{user_id} and
+		book_loan.book_id = #{book_id} and 
+		return_date is null  
+	</update>
+		<update id="returnbook1" parameterType="map">
+		update library
+		set state = 0,term = null
+		where book_id = #{book_id}
+	</update>
+	<!-- 도서 반납 끝 -->
+	
+	<!-- 도서 연장 유효성 검사 -->
+	<select id="extensioncheck" parameterType="map"
+		resultType="String">
+	select reserve_no from library,book_reserve 
+	where library.book_id = book_reserve.book_id and
+	book_reserve.book_id = #{book_id};
+	</select>
+ 	<!-- 도서 기간 연장 -->
+ 	<update id="bookextension" parameterType="map">
+		update book_loan,library
+		set
+		term = date_add(term, interval 7 day)
+		where book_loan.book_id = library.book_id and
+		book_loan.user_id = #{user_id} and 
+		book_loan.book_id = #{book_id} and
+		return_date is null
+	</update>
+
+	<!-- 예약중인 도서리스트 -->
+	<select id="loan_reserve" parameterType="String"
+		resultType="com.library.wol.model.Book_ReserveDto">
+		select library.book_id,no,library.book_name,reserve_date,return_reserve,library.reserve_no,state
+		from book_reserve,library
+		where book_reserve.book_id = library.book_id and user_id = #{user_id};
+	</select>
+	
+	<!-- 예약취소 -->
+	<delete id="cancelreserve" parameterType="map">
+		delete from book_reserve where user_id = #{user_id} and 
+		book_id = #{book_id}
+	</delete>
+	<update id="cancelreserve1" parameterType="map">
+		update library
+		set
+		reserve_no = 0
+		where book_id = #{book_id}
+	</update>
+	<!-- 예약취소 끝 -->
+	
+	<!-- 반납한 도서리스트 -->
+	<select id="loan_history" parameterType="String"
+	resultType="com.library.wol.model.LoanDto">
+	select library.book_id,library.book_name,loan_date,return_date
+	from library,book_loan 
+	where library.book_id = book_loan.book_id and 
+	user_id = #{user_id} and 
+	return_date is not null
+	</select>
+
+</mapper>
