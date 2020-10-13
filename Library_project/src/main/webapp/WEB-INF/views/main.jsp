@@ -17,6 +17,7 @@
 <input type="button" value="로그인" onclick="checkidpw()">
 <input type="button" value="회원가입" onclick="window.open('sign.do','window팝업','width=500, height=500, menubar=no, status=no, toolbar=no');">
 <input type="button" value="pw찾기" onclick="window.open('idpwfind.do','window팝업','width=300, height=350, menubar=no, status=no, toolbar=no');">
+
 <br><br>
 <a href="data.do">도서 검색/예약</a><br>
 <a href="insertbook.do">신규 도서 등록</a><br>
