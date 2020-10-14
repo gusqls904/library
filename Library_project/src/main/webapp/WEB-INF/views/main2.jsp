@@ -11,14 +11,16 @@
 	Hello Library!  
 </h1>
 
-${user_id}님 환영합니다.
+${user_id}님 환영합니다.<br>
 
 
 
-<input type="button" id="logout" name="logout" value="로그아웃" onclick='location.href="logout.do";'><br>
+<input type="button" id="logout" name="logout" value="로그아웃" onclick='location.href="logout.do";'>
 <input type="button" id="logout" name="logout" value="내정보 수정"
 onclick="window.open('profile.do','window팝업','width=500, height=500, menubar=no, status=no, toolbar=no');">
 <br>
+<br>
+
 <a href="data.do">도서 검색/예약</a><br>
 <a href="loan.do">마이페이지</a><br>
 

@@ -5,7 +5,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="insert.do" method="post" enctype="multipart/form-data">
+<form action="newinsert.do" method="post" enctype="multipart/form-data">
 이미지 : <input type="file" name="report" id="report" ><br>
 도서이름 : <input type="text" id="book_name" name="book_name"><br>
 저자 : <input type="text" id="author" name="author"><br>

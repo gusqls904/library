@@ -3,10 +3,6 @@ package com.library.wol.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,15 +14,9 @@ import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.Gson;
-import com.library.wol.model.BoardCriteria;
 import com.library.wol.model.BookLoanDto;
 import com.library.wol.model.DataDto;
 import com.library.wol.service.DataService;
@@ -56,12 +46,12 @@ public class DataController {
 	}
 
 	// 신규 독서 등록
-	@RequestMapping(value = "/insert.do")
+	@RequestMapping(value = "/newinsert.do")
 	public String insertBook(String book_name, String author, String publisher, String issueyear, MultipartFile report,
 			HttpServletRequest request) {
 		Map<String, String> map = new HashedMap<String, String>();
 
-		// 이미지 경로 저장위치에 따라 바꿔야함
+		// 이미지 경로 저장위치에 따라 바꿔야함(이미지폴더 경로)
 		String path = "C:\\Users\\gusql\\Documents\\workspace-spring-tool-suite-4-4.7.0.RELEASE\\Library\\src\\main\\webapp\\resources\\Images";
 		String alterpath = "resources\\Images\\";
 
@@ -94,17 +84,21 @@ public class DataController {
 	}
 
 	// 도서 검색
-	@RequestMapping(value = "/select.do", produces = "text/plain;charset=UTF-8")
-	public String select(HttpServletRequest request,String select,String select1, String book_id, Map<String, String> map, Model m) {	
-		System.out.println("검색타입--" + select1);
-		System.out.println("검색값--" + select);
+	@RequestMapping(value = "/book_search.do", produces = "text/plain;charset=UTF-8")
+	public String search(HttpServletRequest request,String search,String keyword, String book_id, Map<String, String> map, Model m) {
+		
+		//System.out.println("검색타입--" + keyword);
+		//System.out.println("검색값--" + search);
 		
 		map.put("book_id", book_id);
-		map.put("select", select);
-		map.put("select1", select1);
+		map.put("search", search);
+		map.put("keyword", keyword);
 		
-		List<DataDto> dto = service.select(map);
-
+		
+		List<DataDto> dto = service.search(map);
+		//System.out.println("검색 도서 목록" + dto);
+		
+		//모델 사용으로 jsp에서 값 사용
 		m.addAttribute("list", dto);
 				
 		return "dataselect";
@@ -112,7 +106,7 @@ public class DataController {
 
 	// 도서 대여
 	@RequestMapping(value = "/loaninsert.do")
-	public String insert(String select,String book_id,Model model, HttpSession session) {
+	public String insert(String search,String book_id,Model model, HttpSession session) {
 
 		Map<String, String> m = new HashedMap<String, String>();
 	
@@ -120,12 +114,12 @@ public class DataController {
 		
 		m.put("user_id", user_id);
 		m.put("book_id", book_id);
-		m.put("select", select);
+		m.put("search", search);
 		
-		System.out.println("대여 시작");
+		//System.out.println("대여 시작");
 		service.loaninsert(m);
 		
-		List<DataDto> dto = service.select(m);
+		List<DataDto> dto = service.search(m);
 		model.addAttribute("list", dto);
 		
 		return "data";
@@ -161,14 +155,17 @@ public class DataController {
 		HttpServletResponse response) throws IOException {
 		Map<String, String> map = new HashedMap<String, String>();
 		
-		String user_id = (String) session.getAttribute("user_id"); 
+		//세션에 저장된 아이디값 
+		String user_id = (String) session.getAttribute("user_id");
+		
 		map.put("user_id", user_id);
 		map.put("book_id", book_id);
 		
 		List<BookLoanDto> dto =  service.reservecheck(map);
 		
+		//컨트롤러에서 유효성 검사 후 (알러트 출력)
 		response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out_equals = response.getWriter();			
+        PrintWriter out_equals = response.getWriter();
         
         if(dto.size() == 0){
 				service.insertreserve(map);
@@ -178,30 +175,32 @@ public class DataController {
         }for (int i = 0; i < dto.size(); i++) {
         	if(dto.get(i).getBook_id().equals(book_id)) {
 				out_equals.println("<script>alert('이미 대여하셨습니다.');</script>");
-		        out_equals.flush(); 		        
-			}	
+		        out_equals.flush();
+			}
 		}
         			return "data";
 	}
 	
 	//예약 도서 대여
 	@RequestMapping(value = "/reserveRental.do")
-	public String reserveRental(String select,String book_id,Model model, HttpSession session) {
-
+	public String reserveRental(String search,String book_id,Model model, HttpSession session) {
 		Map<String, String> m = new HashedMap<String, String>();
 		
+		//세션에 저장된 아이디값 
 		String user_id = (String) session.getAttribute("user_id"); 
 		
 		m.put("user_id", user_id);
 		m.put("book_id", book_id);
-		m.put("select", select);
+		m.put("search", search);
 		
+		//System.out.println("예약도서 대여 시작");
+		//저장된 예약값 삭제
 		loan.cancelreserve(m);
-		
-		System.out.println("대여 시작");
+		//대여목록에 저장
 		service.loaninsert(m);
+		//System.out.println("예약 도서 대여 완료");
 		
-		List<DataDto> dto = service.select(m);
+		List<DataDto> dto = service.search(m);
 		model.addAttribute("list", dto);
 		
 		return "data";

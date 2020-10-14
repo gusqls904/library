@@ -1,13 +1,6 @@
 package com.library.wol.controller;
 
-import java.io.Console;
-import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +14,6 @@ import com.library.wol.model.SignDto;
 import com.library.wol.service.EmailService;
 import com.library.wol.service.LoginDao;
 import com.library.wol.service.LoginService;
-import com.mysql.cj.Session;
 
 @Controller
 public class EmailController {

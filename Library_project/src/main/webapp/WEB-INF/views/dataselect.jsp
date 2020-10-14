@@ -14,14 +14,14 @@
 <h2>도서검색</h2>
 
 <a href="main2.do">목록으로</a><br><br>
-<select id="op" name="op">
+<select id="keyword" name="keyword">
 	<option value="all">전체</option>
 	<option value="bookname">제목</option>
 	<option value="author">저자</option>
 	<option value="publisher">출판사</option>
 </select>
-	<input type="text" id="select" name="select">
-	<input type="button" onclick="selectClick()" value="검색">
+	<input type="text" id="search" name="search">
+	<input type="button" onclick="searchClick()" value="검색">
 
 	<br>
  	<c:forEach var="list" items="${list}">
@@ -41,17 +41,18 @@
 			<input type="button" value="예약도서대여" id="${list.book_id}" onclick="reserveRental('${list.book_id}')">
 		</c:when>
 		
-		<c:when test="${list.state == 1 and list.reserve_no == user_id}">
-		 	대여중 (예약 : 1명)(반납예정일 ${list.term})<br>
-		 	<input type="button" value="대여하기" disabled="disabled">
-		 	<input type="button" value="예약하기" disabled="disabled">
-		</c:when>
-		
 		<c:when test="${list.state == 1 and list.reserve_no == '0'}">
 		 	대여중 (예약 : 0명)(반납예정일 ${list.term})<br>
 		 	<input type="button" value="대여하기" disabled="disabled">
 		 	<input type="button" value="예약하기" 
 		 	onclick="BookReserve('${list.book_id}',${list.reserve_no})">
+		 	
+		</c:when>
+		
+		<c:when test="${list.state == 1 and user_id != '0'}">
+		 	대여중 (예약 : 1명)(반납예정일 ${list.term})<br>
+		 	<input type="button" value="대여하기" disabled="disabled">
+		 	<input type="button" value="예약하기" disabled="disabled">
 		</c:when>
 		
 		<c:when test="${list.state == 0 and list.reserve_no == '0'}">
@@ -91,9 +92,9 @@
 
 <script type="text/javascript">
 
-function selectClick(){
-	var select = $("#select").val();
-	var select1 = $("#op option:selected").val();
+function searchClick(){
+	var search = $("#search").val();
+	var keyword = $("#keyword option:selected").val();
 	/* 	$.ajax({
 			
 			type : "post",
@@ -106,7 +107,7 @@ function selectClick(){
 					alert(e.responseText);
 				}); */
 
-	window.location.href='select.do?select=' + select + "&select1=" +select1;
+	window.location.href='book_search.do?search=' + search + "&keyword=" +keyword;
 	}
 
 function BookRental(book_id){

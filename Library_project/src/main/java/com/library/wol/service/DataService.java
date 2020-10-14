@@ -1,17 +1,13 @@
 package com.library.wol.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.library.wol.model.BoardCriteria;
-import com.library.wol.model.BoardVO;
 import com.library.wol.model.BookLoanDto;
 import com.library.wol.model.DataDto;
-import com.library.wol.model.Paging;
 
 @Service
 public class DataService {
@@ -27,8 +23,8 @@ public class DataService {
 		dao.insertbook(map);
 	}
 
-	public List<DataDto> select(Map<String, String> map) {
-		return dao.select(map);
+	public List<DataDto> search(Map<String, String> map) {
+		return dao.search(map);
 	}
 
 

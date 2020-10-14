@@ -6,36 +6,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="data">
 
 	<!-- 도서검색 -->
-	<select id="select" parameterType="map"
+	<select id="search" parameterType="map"
 		resultType="com.library.wol.model.DataDto">
 		select * from library
 		<where>
-		<if test="select1 == 'all'">
+		<if test="keyword == 'all'">
 		book_name like
-		concat('%',#{select},'%') or
+		concat('%',#{search},'%') or
 		author like
-		concat('%',#{select},'%') or
+		concat('%',#{search},'%') or
 		publisher like
-		concat('%',#{select},'%')
+		concat('%',#{search},'%')
 		</if>
-		<if test="select1 == 'bookname'">
+		<if test="keyword == 'bookname'">
 		book_name like
-		concat('%',#{select},'%')
+		concat('%',#{search},'%')
 		</if>
-		<if test="select1 == 'author'">
+		<if test="keyword == 'author'">
 		Author like
-		concat('%',#{select},'%')
+		concat('%',#{search},'%')
 		</if>
-		<if test="select1 == 'publisher'">
+		<if test="keyword == 'publisher'">
 		publisher like
-		concat('%',#{select},'%')
+		concat('%',#{search},'%')
 		</if>
 		</where>
 	</select>
 	<!-- 도서검색 끝 -->
 
 	<!-- 신규 도서 등록 -->
-	<insert id="insertbook" parameterType="map">
+	<insert id="newinsertbook" parameterType="map">
 		insert into
 		library(book_name,image,author,publisher,issueyear,state,term)
 		values(#{book_name},#{image},#{author},#{publisher},#{issueyear},0,null)
@@ -49,8 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	<insert id="returnupdate" parameterType="map">
 		update library
-		set term =
-		date_add(now(), interval 14 day)
+		set term = date_add(now(), interval 14 day)
 		where book_id = #{book_id}
 	</insert>
 	<!-- 상태값 변경 -->
@@ -64,7 +63,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 도서예약 유효성검사 -->
 	<select id="reservecheck" parameterType="map"
 		resultType="com.library.wol.model.BookLoanDto">
-		select book_id from book_loan where user_id = #{user_id} and
+		select book_id from book_loan 
+		where user_id = #{user_id} and
 		book_id = #{book_id} and return_date is null
 	</select>
 
