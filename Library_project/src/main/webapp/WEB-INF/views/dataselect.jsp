@@ -13,17 +13,21 @@
 <body>
 <h2>도서검색</h2>
 
+<%  String search = request.getParameter("search"); 
+	String keyword = request.getParameter("keyword");
+	if(keyword == null) keyword = "";
+%>
 <a href="main2.do">목록으로</a><br><br>
 <select id="keyword" name="keyword">
 	<option value="all">전체</option>
-	<option value="bookname">제목</option>
-	<option value="author">저자</option>
-	<option value="publisher">출판사</option>
+	<option value="bookname" <%=keyword.equals("bookname")|| keyword == null?"selected":""%>>제목</option>
+	<option value="author" <%=keyword.equals("author")|| keyword == null?"selected":""%>>저자</option>
+	<option value="publisher" <%=keyword.equals("publisher")|| keyword == null?"selected":""%>>출판사</option>
 </select>
-	<input type="text" id="search" name="search">
+	<input type="text" id="search" name="search" size=40 value="<%= search %>">
 	<input type="button" onclick="searchClick()" value="검색">
 
-	<br>
+	<br><br>
  	<c:forEach var="list" items="${list}">
  	<input type="hidden" id="book_id" value="${list.book_id}">
  	<input type="hidden" id="reserve_no" value="${list.reserve_no}">
@@ -68,7 +72,7 @@
 		</c:when> 
 		
 		</c:choose>		
-		<br>
+		<br><br>
 		
 		</c:forEach>  
 		

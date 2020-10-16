@@ -11,24 +11,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from library
 		<where>
 		<if test="keyword == 'all'">
-		book_name like
-		concat('%',#{search},'%') or
-		author like
-		concat('%',#{search},'%') or
-		publisher like
-		concat('%',#{search},'%')
+		book_name like concat('%',#{search},'%') or
+		author like concat('%',#{search},'%') or
+		publisher like concat('%',#{search},'%')
 		</if>
 		<if test="keyword == 'bookname'">
-		book_name like
-		concat('%',#{search},'%')
+		book_name like concat('%',#{search},'%')
 		</if>
 		<if test="keyword == 'author'">
-		Author like
-		concat('%',#{search},'%')
+		Author like concat('%',#{search},'%')
 		</if>
 		<if test="keyword == 'publisher'">
-		publisher like
-		concat('%',#{search},'%')
+		publisher like concat('%',#{search},'%')
 		</if>
 		</where>
 	</select>

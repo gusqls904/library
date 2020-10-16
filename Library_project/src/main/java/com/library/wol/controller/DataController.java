@@ -85,9 +85,10 @@ public class DataController {
 
 	// 도서 검색
 	@RequestMapping(value = "/book_search.do", produces = "text/plain;charset=UTF-8")
-	public String search(HttpServletRequest request,String search,String keyword, String book_id, Map<String, String> map, Model m) {
+	public String search(HttpServletRequest request,String search,String keyword, 
+		   String book_id, Map<String, String> map, Model m) {
 		
-		//System.out.println("검색타입--" + keyword);
+		System.out.println("검색타입--" + keyword);
 		//System.out.println("검색값--" + search);
 		
 		map.put("book_id", book_id);
@@ -98,7 +99,7 @@ public class DataController {
 		List<DataDto> dto = service.search(map);
 		//System.out.println("검색 도서 목록" + dto);
 		
-		//모델 사용으로 jsp에서 값 사용
+		//모델 "list"를 jsp로 넘김
 		m.addAttribute("list", dto);
 				
 		return "dataselect";

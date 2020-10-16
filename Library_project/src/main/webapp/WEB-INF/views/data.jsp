@@ -18,29 +18,30 @@
 	<option value="author">저자</option>
 	<option value="publisher">출판사</option>
 </select>
-	<input type="text" id="search" name="search">
+	<input type="text" id="search" name="search" size=40 >
 	<input type="button" onclick="searchClick()" value="검색">
 
 <script type="text/javascript">
-
+	
 	function searchClick(){
 		var search = $("#search").val();
 		var keyword = $("#keyword option:selected").val();
-		console.log(keyword);
-/* 	$.ajax({
-		
-		type : "post",
-		url : "select.do",
-		data : "select=" + select,
-		dataType : "html"
-		}).done(function(data){
-			$('#selectInfo').html(data);
-			}).fail(function(e) {
-				alert(e.responseText);
-			}); */
-
+	
 	window.location.href='book_search.do?search=' + search + "&keyword=" +keyword;
 }
+
+//도서검색 ajax
+	/* 	$.ajax({
+			
+			type : "post",
+			url : "select.do",
+			data : "select=" + select,
+			dataType : "html"
+			}).done(function(data){
+				$('#selectInfo').html(data);
+				}).fail(function(e) {
+					alert(e.responseText);
+				}); */
 </script>
 </body>
 </html>
