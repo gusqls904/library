@@ -41,6 +41,10 @@ public class LoanDao extends SqlSessionDaoSupport{
 		return getSqlSession().selectOne("loan.extensioncheck", map);
 	}
 	
+	public int extensioncheck2(Map<String, String> map) {
+		return getSqlSession().selectOne("loan.extensioncheck2", map);
+	}
+	
 	
 	
 }

@@ -24,7 +24,7 @@ public class DataDao extends SqlSessionDaoSupport{
 	public void loaninsert(Map<String, String> map) {
 		getSqlSession().insert("data.loaninsert", map);
 		getSqlSession().update("data.loanupdate", map);
-		//getSqlSession().update("data.returnupdate", map);
+		getSqlSession().update("data.returnupdate", map);
 	}
 	
 	//도서예약검사

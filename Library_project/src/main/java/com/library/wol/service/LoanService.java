@@ -48,6 +48,10 @@ public class LoanService {
 		return dao.extensioncheck(map);
 	}
 	
+	public int extensioncheck2(Map<String, String> map) {
+		return dao.extensioncheck2(map);
+	}
+	
 	
 	
 

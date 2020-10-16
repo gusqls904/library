@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.collections4.Get;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,9 +32,10 @@ public class LoanController {
 	public String loan(Model m, HttpSession session) {
 		List<LoanDto> list = new ArrayList<LoanDto>();
 
-		String user_id = (String) session.getAttribute("user_id"); 
+		String user_id = (String) session.getAttribute("user_id");
 
 		list = service.loanselect(user_id);
+
 		m.addAttribute("list", list);
 
 		return "loan";
@@ -41,39 +43,46 @@ public class LoanController {
 
 	// 도서 반납
 	@RequestMapping(value = "/returnbook.do")
-	public String returnbook(String book_id,HttpSession session) {
+	public String returnbook(String book_id, HttpSession session) {
 		Map<String, String> map = new HashMap<String, String>();
 
-		String user_id = (String) session.getAttribute("user_id"); 
-		
+		// 세션에 저장된 user_id
+		String user_id = (String) session.getAttribute("user_id");
+
 		map.put("book_id", book_id);
 		map.put("user_id", user_id);
-		
+
 		service.returnbook(map);
 
 		return "redirect:/loan.do";
 	}
-	
-	//도서 기간 연장
+
+	// 도서 기간 연장
 	@RequestMapping(value = "/bookextension.do")
 	@ResponseBody
-	public String bookextension(String book_id,Model m,HttpSession session,
-			HttpServletResponse response) throws IOException {
+	public String bookextension(String book_id, Model m, HttpSession session, HttpServletResponse response)
+			throws IOException {
 		Map<String, String> map = new HashMap<String, String>();
-			
-		String user_id = (String) session.getAttribute("user_id"); 
+
+		String user_id = (String) session.getAttribute("user_id");
 		String res = null;
 		map.put("user_id", user_id);
 		map.put("book_id", book_id);
-		
+
+		//도서 연장 유효성 검사(예약자 유무 확인)
 		String reserve_no = service.extensioncheck(map);
-		System.out.println(reserve_no);
 		if (reserve_no == null) {
-			 service.bookextension(map);
-	         res = "0";
-		}else if(reserve_no.equals("1")){
-	         res = "1";
-			 }
+			//도서 다중 연장 확인
+			int extension = service.extensioncheck2(map);
+			if (extension == 0) {
+				service.bookextension(map);
+				res = "0";
+			}else if (extension == 1) {
+				res = "1";
+			}
+		} else if (reserve_no != null) {
+			res = "2";
+		}
 		return res;
 	}
 
@@ -83,7 +92,7 @@ public class LoanController {
 
 		List<Book_ReserveDto> list = new ArrayList<Book_ReserveDto>();
 
-		String user_id = (String) session.getAttribute("user_id"); 
+		String user_id = (String) session.getAttribute("user_id");
 
 		list = service.loan_reserve(user_id);
 
@@ -96,30 +105,27 @@ public class LoanController {
 	@RequestMapping(value = "/cancelreserve.do")
 	public String cancelreserve(String book_id, Model m, HttpSession session) {
 
-		String user_id = (String) session.getAttribute("user_id"); 
+		String user_id = (String) session.getAttribute("user_id");
 		Map<String, String> map = new HashMap<String, String>();
-		
+
 		map.put("user_id", user_id);
 		map.put("book_id", book_id);
-		
+
 		service.cancelreserve(map);
-		
+
 		return "redirect:loan_reserve.do";
 	}
-	
+
 	// 반납 도서현황
 	@RequestMapping(value = "/loan_history.do")
 	public String loan_history(Model m, HttpSession session) {
 		List<LoanDto> list = new ArrayList<LoanDto>();
 
-		String user_id = (String) session.getAttribute("user_id"); 
-		
+		String user_id = (String) session.getAttribute("user_id");
 		list = service.loan_history(user_id);
-		
 		m.addAttribute("list", list);
-		
+
 		return "loan_history";
 	}
-
 
 }
