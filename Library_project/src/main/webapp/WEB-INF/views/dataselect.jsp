@@ -49,8 +49,7 @@
 		 	대여중 (예약 : 0명)(반납예정일 ${list.term})<br>
 		 	<input type="button" value="대여하기" disabled="disabled">
 		 	<input type="button" value="예약하기" 
-		 	onclick="BookReserve('${list.book_id}',${list.reserve_no})">
-		 	
+		 	onclick="BookReserve('${list.book_id}',${list.reserve_no})"> 	
 		</c:when>
 		
 		<c:when test="${list.state == 1 and user_id != '0'}">
@@ -70,12 +69,9 @@
 			<input type="button" value="대여하기" disabled="disabled">
 			<input type="button" value="예약하기" disabled="disabled">
 		</c:when> 
-		
 		</c:choose>		
 		<br><br>
-		
 		</c:forEach>  
-		
 		<br><br><br>
 		
 <div align="left">
@@ -137,7 +133,6 @@ function BookRental(book_id){
 				
  		
   	window.location.href='loaninsert.do?book_id=' + book_id;
-	alert("대여 완료")
 	} 
 
 function reserveRental(book_id){
@@ -163,7 +158,8 @@ function reserveRental(book_id){
 				
  		
   	window.location.href='reserveRental.do?book_id=' + book_id;
-	alert("대여 완료")
+  	
+	alert("예약 완료")
 	} 
 
 function BookReserve(book_id,reserve_no){   
