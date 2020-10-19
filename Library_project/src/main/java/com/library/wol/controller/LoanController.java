@@ -91,11 +91,9 @@ public class LoanController {
 	public String loan_reserve(Model m, HttpSession session) {
 
 		List<Book_ReserveDto> list = new ArrayList<Book_ReserveDto>();
-
 		String user_id = (String) session.getAttribute("user_id");
-
+		
 		list = service.loan_reserve(user_id);
-
 		m.addAttribute("list", list);
 
 		return "loan_reserve";

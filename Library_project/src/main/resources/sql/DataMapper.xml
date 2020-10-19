@@ -61,19 +61,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where user_id = #{user_id} and
 		book_id = #{book_id} and return_date is null
 	</select>
-
 	<!-- 도서 예약 -->
 	<select id="inspectreserve" parameterType="map"
 		resultType="string">
 		select user_id from book_reserve where user_id = #{user_id}
 	</select>
-
-	<!-- 도서 예약 -->
 	<insert id="insertreserve" parameterType="map">
+		insert into
+		book_reserve(user_id,book_id,reserve_date)
+		values(#{user_id},#{book_id},now())
+	</insert>
+	
+	<!-- 보류 -->
+	<!-- <insert id="insertreserve" parameterType="map">
 		insert into
 		book_reserve(user_id,book_id,reserve_date,return_reserve)
 		values(#{user_id},#{book_id},now(),date_add(now(), interval 14 day))
-	</insert>
+	</insert> -->
+	
 	<update id="book_count" parameterType="String">
 		update library
 		set

@@ -42,7 +42,8 @@
 			예약중 (대여가능)<br>
 			<input type="button" value="대여하기" disabled="disabled">
 			<input type="button" value="예약하기" disabled="disabled">
-			<input type="button" value="예약도서대여" id="${list.book_id}" onclick="reserveRental('${list.book_id}')">
+			<input type="button" value="예약도서대여" id="${list.book_id}" 
+			onclick="reserveRental('${list.book_id}')">
 		</c:when>
 		
 		<c:when test="${list.state == 1 and list.reserve_no == '0'}">
@@ -60,7 +61,8 @@
 		
 		<c:when test="${list.state == 0 and list.reserve_no == '0'}">
 		 	대여가능<br>
-		 	<input type="button" value="대여하기" id="${list.book_id}" onclick="BookRental('${list.book_id}')">
+		 	<input type="button" value="대여하기" id="${list.book_id}" 
+		 	onclick="BookRental('${list.book_id}')">
 		 	<input type="button" value="예약하기" disabled="disabled">
 		</c:when>
 		

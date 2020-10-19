@@ -33,6 +33,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		set state = 0,term = null
 		where book_id = #{book_id}
 	</update>
+	<update id="updateReserve_date" parameterType="map">
+		update book_reserve
+		set return_reserve = date_add(now(), interval 14 day)
+		where book_id = #{book_id} and 
+		return_reserve is null;
+	</update>
 	<!-- 도서 반납 끝 -->
 	
 	<!-- 도서 연장 유효성 검사 -->
@@ -42,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	where library.book_id = book_reserve.book_id and
 	book_reserve.book_id = #{book_id};
 	</select>
-	<!-- 도서 다중연장 확인 -->
+	<!-- 도서 다중연장 검사 -->
 	<select id="extensioncheck2" parameterType="map"
 		resultType="int">
 	select extension 

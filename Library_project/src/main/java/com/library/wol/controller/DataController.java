@@ -165,8 +165,8 @@ public class DataController {
 
 	// 도서 예약
 	@RequestMapping(value = "/BookReserve.do")
-	public String insertreserve(String book_id, Model m, HttpSession session, HttpServletResponse response)
-			throws IOException {
+	public String insertreserve(String book_id, Model m, HttpSession session, 
+			HttpServletResponse response) throws IOException {
 		Map<String, String> map = new HashedMap<String, String>();
 
 		// 세션에 저장된 아이디값
@@ -174,13 +174,12 @@ public class DataController {
 
 		map.put("user_id", user_id);
 		map.put("book_id", book_id);
-
+		
 		List<BookLoanDto> dto = service.reservecheck(map);
 
 		// 컨트롤러에서 유효성 검사 후 (알러트 출력)
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out_equals = response.getWriter();
-
 		if (user_id == null) {
 			out_equals.println("<script>alert('로그인 하세요.');</script>");
 			out_equals.flush();

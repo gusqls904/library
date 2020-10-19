@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<a href="loan.do">도서대출현황</a>
+<a href="loan.do">도서대여현황</a>
 <a href="loan_reserve.do">도서예약현황</a>
 <a href="loan_history.do">반납이력조회</a>
 <a href="main2.do">목록으로</a>
@@ -25,7 +25,6 @@
 			<td>반납</td>
 			<td>반납연기</td>	
 		</tr>
-		
 			<c:forEach var="list" items="${list}" varStatus="status">
 				<input type="hidden" id="book_id" value="${list.book_id}">
 				<input type="hidden" id="term" value="${list.term}">
@@ -67,7 +66,8 @@
 				</c:choose>
 			</tr>
 			</c:forEach>
-	</table>	<br>
+	</table>
+	
 </body>
 
 <script type="text/javascript">

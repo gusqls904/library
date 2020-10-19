@@ -7,7 +7,7 @@
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 </head>
 <body>
-<a href="loan.do">도서대출현황</a>
+<a href="loan.do">도서대여현황</a>
 <a href="loan_reserve.do">도서예약현황</a>
 <a href="loan_history.do">반납이력조회</a>
 <a href="main2.do">목록으로</a>
@@ -23,15 +23,22 @@
 			<td>예약/대출 상태</td>
 			<td>선택</td>
 		</tr>
-		
 		<c:forEach var="list" items="${list}" varStatus="status">
 		<input type="hidden" id="book_id" value="${list.book_id}">
 		
 		<tr>
+		
 			<td>${status.count}</td>
 			<td>${list.book_name}</td>
 			<td>${list.reserve_date}</td>
+			<c:choose>
+			<c:when test="${list.return_reserve == null}">
+			<td  style="text-align: center;"> - </td>
+			</c:when>
+			<c:when test="${list.return_reserve != null}">
 			<td>${list.return_reserve}</td>
+			</c:when>
+			</c:choose>
 			<td>1 번째</td>
 			<c:choose>
 			<c:when test="${list.state == 1}">
@@ -43,10 +50,9 @@
 			</c:choose>
 			<td><input type = "button" value="예약취소" 
 			onclick="cancelreserve('${list.book_id}')"></td>
-		<tr>
+		</tr>
 		</c:forEach>
 	</table>
-
 </body>
 
 <script type="text/javascript">
