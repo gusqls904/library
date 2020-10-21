@@ -8,9 +8,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 대여중인 도서리스트 -->
 	<select id="loanselect" parameterType="String"
 		resultType="com.library.wol.model.LoanDto">
-		select datediff(library.term,loan_date) as
-		datediff,library.book_id,extension,
-		no,book_name,user_id,loan_date,library.term,return_date,arrears,state
+		select datediff(library.term,loan_date) as datediff,
+		library.book_id,extension,no,book_name,user_id,loan_date,
+		library.term,return_date,arrears,state
 		from library,book_loan
 		where library.book_id = book_loan.book_id and
 		book_loan.user_id = #{user_id} and return_date is null

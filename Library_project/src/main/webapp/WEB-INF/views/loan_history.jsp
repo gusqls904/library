@@ -12,7 +12,7 @@
 	<a href="loan.do">도서대여현황</a>
 	<a href="loan_reserve.do">도서예약현황</a>
 	<a href="loan_history.do">반납이력조회</a>
-	<a href="main2.do">목록으로</a>
+	<a href="main.do">목록으로</a>
 
 	<br>
 	<br>

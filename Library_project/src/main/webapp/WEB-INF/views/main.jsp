@@ -20,7 +20,9 @@
 
 <br><br>
 <a href="data.do">도서 검색/예약</a><br>
-<a href="insertbook.do">신규 도서 등록</a><br>
+	<c:if test="${user_id == 'test'}">
+		<a href="insertbook.do">신규 도서 등록</a><br>
+	</c:if>
 
 <h2>게시판</h2>
 

@@ -71,6 +71,6 @@ public class LoginController {
 	      System.out.println(number);
 	      m.addAttribute("number", number);
 	  	Session.invalidate();
-	      return "main";
+	      return "redirect:/main.do";
 	   }
 }

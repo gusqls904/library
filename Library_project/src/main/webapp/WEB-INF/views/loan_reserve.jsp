@@ -25,9 +25,7 @@
 		</tr>
 		<c:forEach var="list" items="${list}" varStatus="status">
 		<input type="hidden" id="book_id" value="${list.book_id}">
-		
 		<tr>
-		
 			<td>${status.count}</td>
 			<td>${list.book_name}</td>
 			<td>${list.reserve_date}</td>

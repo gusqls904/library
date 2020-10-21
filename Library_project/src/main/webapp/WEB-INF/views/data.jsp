@@ -10,7 +10,7 @@
 
 <h2>도서검색</h2>
 
-<a href="main2.do">목록으로</a><br><br>
+<a href="main.do">목록으로</a><br><br>
 
 <select id="keyword" name="keyword">
 	<option value="all">전체</option>
