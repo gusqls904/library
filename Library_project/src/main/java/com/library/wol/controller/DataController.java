@@ -47,12 +47,13 @@ public class DataController {
 
 	// 신규 독서 등록
 	@RequestMapping(value = "/newinsert.do")
-	public String insertBook(String book_name, String author, String publisher, String issueyear, MultipartFile report,
-			HttpServletRequest request) {
+	public String insertBook(String book_name, String author, String publisher, 
+			String issueyear, MultipartFile report,HttpServletRequest request) {
 		Map<String, String> map = new HashedMap<String, String>();
 
 		// 이미지 경로 저장위치에 따라 바꿔야함(이미지폴더 경로)
-		String path = "C:\\Users\\gusql\\Documents\\workspace-spring-tool-suite-4-4.7.0.RELEASE\\Library\\src\\main\\webapp\\resources\\Images";
+		String path = "C:\\Users\\gusql\\Documents\\workspace-spring-tool-suite-4-4.7.0.RELEASE"
+				+ "\\Library\\src\\main\\webapp\\resources\\Images";
 		String alterpath = "resources\\Images\\";
 
 		File file = new File(path);
