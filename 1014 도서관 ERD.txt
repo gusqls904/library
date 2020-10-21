@@ -1,0 +1,194 @@
+use library;
+
+#유저정보
+create table lib_member(
+user_id 	varchar(45)	 primary key , #유저아이디
+password 	varchar(45),		#비밀번호
+name		varchar(45),		#이름
+gender		varchar(45),		#성별
+birth		varchar(45),		#생년월일
+email		varchar(45),		#이메일
+phone		varchar(45),		#전화번호
+address		varchar(45)			#주소
+);
+
+#도서정보
+create table library(
+book_id     int  primary key not null auto_increment,    #도서코드
+book_name   varchar(45), 		#제목
+image 		varchar(200), 		#이미지
+author      varchar(45), 		#저자
+publisher   varchar(45), 		#출판사
+issueyear	varchar(10),		#발행년도
+state		int,				#대여상태
+term 		date,				#반납기간
+reserve_no	varchar(45) default 0 		#예약순번
+);
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("나미야 잡화점","resources\\Images\\07102772.jpg","게이고","동아","2011",0,null);
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("아가씨와밤","resources\\Images\\14203371.jpg","기욤뮈소","밝은세상","2018",0,null);
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("나랑 친구 할래?","resources\\Images\\02748085.jpg","박신식","책세상","2007",0,null);
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("구해줘","resources\\Images\\02504290.jpg","기욤뮈소","밝은세상","2018",0,null);
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("은밀하게 위대하게","resources\\Images\\은위.jpg","최종훈","걸리버","2013",0,null);
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("걸리버 여행기","resources\\Images\\걸리버.jpg","조너선 스위프트","한국셰익스피어","2015",0,null);
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("택시 소년","resources\\Images\\택시소년.jpg","데보라 엘리스","천개의바람","2014",0,null);
+
+#대여정보
+create table book_loan(
+no			int primary key not null auto_increment,	#번호
+user_id		varchar(45),		#유저아이디
+book_id 	int ,				#도서코드	
+loan_date	date,				#대출날짜	
+return_date date,				#반납날짜
+arrears		int 	default 0,	#연체일
+extension	int 	default 0 	#기간연장유무
+);
+
+select * 
+	where library.book_id = book_reserve.book_id and
+	book_loan.return_date is null and
+	book_reserve.book_id = 4;
+    
+select * from library,book_reserve,book_loan
+	where library.book_id = book_reserve.book_id and
+	book_reserve.book_id = 4;
+    
+#연체일 자동업데이트
+CREATE EVENT if not exists days
+    ON SCHEDULE
+        EVERY 1 day starts CURRENT_TIMESTAMP + INTERVAL 1 day
+    ON COMPLETION PRESERVE
+    ENABLE
+    DO 
+	update book_loan 
+    set arrears = arrears + 1
+    where return_date is null;
+
+#예약만료일 지나면 자동 삭제
+CREATE EVENT if not exists reserve_delete
+    ON SCHEDULE
+        EVERY 1 day starts CURRENT_TIMESTAMP
+    ON COMPLETION PRESERVE
+    ENABLE
+    DO 
+	delete from book_reserve
+    where return_reserve < now();
+    
+   #test 
+   insert into book_reserve(book_id,return_reserve) values(10,'2020-10-17');
+    
+    
+
+drop event days;
+
+
+#예약정보
+create table book_reserve(		#예약현황
+no				int primary key not null auto_increment,	#번호
+user_id			varchar(45),	#유저아이디
+book_id			int ,			#도서코드 
+reserve_date	date,			#예약일
+return_reserve	date			#예약만기일
+);
+
+CREATE TABLE Board(
+    bno int auto_increment,
+    title VARCHAR(100)     NOT NULL,
+    content VARCHAR(2000)  NOT NULL,
+    writer VARCHAR(100)    NOT NULL,
+    regdate VARCHAR(100),
+    viewcnt int default 0,
+    PRIMARY KEY(BNO)
+);
+
+
+
+#-----------------------(등록부분)-------------------------------
+show variables like 'event%';
+
+select * from lib_member;
+select * from library;
+select * from book_loan;
+select * from book_reserve;
+select * from Board;
+
+drop table lib_member;
+drop table library;
+drop table book_loan;
+drop table book_reserve;
+drop table Board;
+
+#대여상태 초기화
+update library
+set state = 0
+where state = 1;
+
+update library
+set state = 1
+where book_id = 6;
+
+update library
+set reserve_no = '0'
+where reserve_no not like '0';
+
+		update book_reserve
+		set return_reserve = date_add(now(), interval 14 day)
+		where book_id = 5 and 
+		return_reserve is null;
+
+update library
+set reserve_no = '0'
+where book_id = 3;
+
+select book_loan.book_id from book_loan,library where book_loan.book_id = library.book_id and user_id = "tr" 
+and return_date is null;
+
+	select reserve_no from library,book_reserve 
+	where library.book_id = book_reserve.book_id and
+	book_reserve.book_id = "5";
+    
+		update book_loan,library
+		set
+		term = date_add(term, interval 7 day)
+		where book_loan.book_id = library.book_id and
+		book_loan.user_id = "test" and 
+		book_loan.book_id = "3" and
+		return_date is null;
+        
+        select datediff(library.term,loan_date) as
+		datediff,library.book_id,
+		no,book_name,user_id,loan_date,library.term,return_date,arrears,state
+		from library,book_loan
+		where library.book_id = book_loan.book_id and
+		book_loan.user_id = 'test' and return_date is null;
+        
+        
+        select datediff(library.term,loan_date) - book_loan.arrears
+        from book_loan,library 
+        where book_loan.book_id = library.book_id and book_loan.return_date is null;
+        
+        
+        
+		update book_loan,library
+		set
+		return_date = now(),arrears = datediff(now(),term)
+		where 
+		book_loan.book_id = library.book_id and
+		user_id = "gus" and
+		book_loan.book_id = 5 and 
+		return_date is null;
+        
+        
