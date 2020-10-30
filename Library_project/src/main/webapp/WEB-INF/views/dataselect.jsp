@@ -17,7 +17,7 @@
 	String keyword = request.getParameter("keyword");
 	if(keyword == null) keyword = "";
 %>
-<a href="main.do">목록으로</a><br><br>
+<a href="main2.do">목록으로</a><br><br>
 <select id="keyword" name="keyword">
 	<option value="all">전체</option>
 	<option value="bookname" <%=keyword.equals("bookname")|| keyword == null?"selected":""%>>제목</option>

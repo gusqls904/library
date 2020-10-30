@@ -91,6 +91,7 @@ public class DataController {
 
 		// System.out.println("검색타입--" + keyword);
 		// System.out.println("검색값--" + search);
+		
 
 		map.put("book_id", book_id);
 		map.put("search", search);
@@ -98,7 +99,7 @@ public class DataController {
 
 		List<DataDto> dto = service.search(map);
 		// System.out.println("검색 도서 목록" + dto);
-
+		//System.out.println("이미지 경로" + dto.get(0).getImage());
 		// 모델 "list"를 jsp로 넘김
 		m.addAttribute("list", dto);
 
